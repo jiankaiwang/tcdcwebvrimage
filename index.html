@@ -1,0 +1,61 @@
+<html class="a-html"><head>
+    <meta charset="utf-8">
+    <title>TCDCWebVR - Image VR Demo</title>
+    <meta name="description" content="Scene Change ">
+    <meta aframe-injected="" name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no,minimal-ui">
+    <meta aframe-injected="" name="mobile-web-app-capable" content="yes"><meta aframe-injected="" name="theme-color" content="black">
+    <script src="resources/aframe.min.js"></script>
+    <script src="resources/aframe-animation-component.min.js"></script>
+    <script src="resources/aframe-event-set-component.min.js"></script>
+    <script src="resources/aframe-layout-component.min.js"></script>
+    <script src="resources/aframe-template-component.min.js"></script>
+    <script src="resources/set-image.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <img id="eic" crossorigin="anonymous" src="data/eic.jpg">
+        <img id="eic-thumb" crossorigin="anonymous" src="data/thumb-eic.png">
+        <img id="training-thumb" crossorigin="anonymous" src="data/thumb-training.png">
+        <img id="full-thumb" crossorigin="anonymous" src="data/thumb-full.png">
+        <audio id="click-sound" crossorigin="anonymous" src="data/click.ogg"></audio>
+        <img id="training" crossorigin="anonymous" src="data/training-classroom.jpg">
+        <img id="full" crossorigin="anonymous" src="data/cpucl.jpg">
+
+        <!-- Image link template to be reused. -->
+        <script id="link" type="text/html">
+          <a-entity class="link"
+            geometry="primitive: plane; height: 1; width: 1"
+            material="shader: flat; src: ${thumb}"
+            event-set__1="_event: mousedown; scale: 1 1 1"
+            event-set__2="_event: mouseup; scale: 1.2 1.2 1"
+            event-set__3="_event: mouseenter; scale: 1.2 1.2 1"
+            event-set__4="_event: mouseleave; scale: 1 1 1"
+            set-image="on: click; target: #image-360; src: ${src}"
+            sound="on: click; src: #click-sound"></a-entity>
+        </script>
+      </a-assets>
+
+      <!-- 360-degree image. -->
+      <a-sky id="image-360" radius="10" src="#eic"></a-sky>
+
+      <!-- Image links. -->
+      <a-entity id="links" layout="type: line; margin: 1.5" position="0 -1 -4">
+        <a-entity template="src: #link" data-src="#training" data-thumb="#training-thumb"></a-entity>
+        <a-entity template="src: #link" data-src="#eic" data-thumb="#eic-thumb"></a-entity>
+        <a-entity template="src: #link" data-src="#full" data-thumb="#full-thumb"></a-entity>
+      </a-entity>
+
+      <!-- Camera + cursor. -->
+      <a-entity camera look-controls>
+        <a-cursor id="cursor"
+          animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
+          animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
+          event-set__1="_event: mouseenter; color: springgreen"
+          event-set__2="_event: mouseleave; color: black"
+          fuse="true"
+          raycaster="objects: .link"></a-cursor>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>
